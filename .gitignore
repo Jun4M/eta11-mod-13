@@ -5,6 +5,9 @@
 a13.bin
 state.bin
 eta11
+# res_<l>.bin: p(n) mod l for n <= NMAX; ./pgen 30000000 regenerates in ~2 min
+res_*.bin
+pgen
 
 # Run logs. The numbers that matter are transcribed into results/EXPECTED.md,
 # which is versioned; the logs themselves are regenerable.
