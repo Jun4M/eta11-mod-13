@@ -1,0 +1,102 @@
+id	section	claim	class	source	enforced
+1	title	m <= 10^9 (target range)	A	eta11.c/analyze.py	yes
+2	header	earlier drafts inflated Legendre correlations by ~24%	A	paper_figures.py	no
+3	abstract	41,666,667 coefficients	A	analyze.py	yes
+4	abstract	B falls 1.7614 -> 1.0290	A	analyze.py	yes
+5	abstract	N(X) = 0.0296*X^0.7241	A	analyze.py	yes
+6	abstract	spread 8-22%	A	paper_figures.py	yes
+7	abstract	E falls by factor 3.8	A	factorisation_check.py	no
+8	abstract	f_q ~ q^-0.405	A	fit_alpha.py	yes
+9	abstract	95% [0.355, 0.457]	A	fit_alpha.py	yes
+10	abstract	723 primes to q = 5483	A	analyze.py	yes
+11	abstract	1/2,1/3,1/4,2/3,3/4 rejected; 2/5 fits	A	fit_alpha.py	yes
+12	abstract	observed non-vanishing count (12/13)X	B	arithmetic consequence of the measured density	no
+13	1	earlier analysis used 12 auxiliary primes	A	mechanism_negatives.py (12-prime fit: alpha 0.550, 1/2 consistent)	no
+14	2	reduction verified directly for all n < 30000	B	corrected to n <= 40000	no
+15	2	single-eta reduction fails for l = 17,23,29,31,37,41,47	A	paper_figures.py	no
+16	2 pop	13|t stratum E = +0.1193 vs +0.0317 bulk	A	analyze.py	yes
+17	3	lambda_p table, 12 values	A	test_verify.py (consumed)	no
+18	3	eps(p) = +1 if p = 2 mod 3, -1 if p = 1 mod 3	A	test_verify.py (consumed)	no
+19	3	7,600 cases per prime	A	test_verify.py	yes
+20	3	91200 congruences	A	test_verify.py	yes
+21	3	18833 congruences	A	test_verify.py	yes
+22	3	kernel bound t < 2*10^5	A	test_verify.py	no
+23	3	character checked on all 50 primes 5 <= p <= 250	A	verified correct: 50 primes	no
+24	3	p = 37,61,73,97,109,157,181,193 all = 1 mod 4 give eps = -1	A	verified correct: all eight give eps = -1	no
+25	3	lambda = 5 so p^(lambda-1) = p^4, p^(2lambda-1) = p^9	C	FKO (1.4)	no
+26	3	pairs (5,31),(11,37),(17,43) congruent mod 13 with different lambda_p	B	corrected: lambda_11 = lambda_37	no
+27	3	eta-quotient search: weight-10, two or three divisors of 24	A	mechanism_negatives.py (8,992 quotients, max |corr| 0.425 vs null median 0.487)	no
+28	3	level-1 forms Delta*E_4..E_14, twists p^j, 0<=j<=11	A	mechanism_negatives.py (84 candidates, max |corr| 0.088 vs null median 0.337)	no
+29	3	Shimura: 60 primes 5 <= q <= 293	A	shimura288.gp	yes
+30	3	max |corr| 0.294 at level 288, 45 pairs	A	shimura288.gp	yes
+31	3	max |corr| 0.377 over 142 pairs, 17 levels	A	shimura288.gp	yes
+32	3	correlation SE 0.130 at n = 60	A	paper_figures.py	yes
+33	3	null median max |corr| 0.313 (N=45), 0.358 (N=142)	A	paper_figures.py	yes
+34	3.2	smallest instance t = 155, n0 = 84	A	test_verify.py	no
+35	3.2	n = 84, 2099, 4114, 10159, 14189, 24264, 30309, 44414, 52474	A	paper_figures.py	no
+36	3.2	847 members of the t=155 class	A	test_verify.py	yes
+37	3.2	largest member n = 541,239,159	A	paper_figures.py	no
+38	3.2	all 426 square classes with t < 10^5 vanish entirely	A	paper_figures.py	no
+39	3.2	OEIS A399067	C	OEIS	no
+40	4	controls computed for n <= 3*10^7	A	pgen.c	no
+41	4	auxiliary p in {5,7,11,17,19}	A	controls.py	no
+42	4	kernel bound t < 4*10^5	A	controls.py	no
+43	4	purity 100% for l = 13..31 (6 values)	A	controls.py	no
+44	4	purity 3.06 / 2.69 / 2.62 / 2.43 for l = 37,41,43,47	A	controls.py	yes
+45	4	1/l row 2.70 / 2.44 / 2.33 / 2.13	A	controls.py	yes
+46	4	purity drift 3.53 / 3.27 / 3.06 / 3.02 at four bounds	A	controls.py	yes
+47	4	withdrawn purity 3.19 / 2.78 / 2.81 / 2.55	A	historical	yes
+48	4	dimension count = 1 at l <= 31, = 2 at l = 37	C	FKO	no
+49	4	exponent fitted over 5 <= p < 60, 14 primes	A	controls.py	no
+50	4	k = (l-3)/2 values 5,7,8,10,13,14	A	controls.py	no
+51	4	fitted exponents 4,6,7,9,12,13	A	controls.py	no
+52	4	conductor 3 for l=13,17,29 and 12 for l=19,23,31	A	controls.py	no
+53	4	both tables 6/6 at p<60 and p<80 (19 primes)	A	controls.py	no
+54	5.1	eleven multiplications, int8 storage	A	eta11.c	no
+55	5.1	numpy cross-check on 7,692,308 coefficients	A	extended_verify.py	yes
+56	5.1	exact p(n) to n <= 40000, 218 digits	A	test_verify.py	yes
+57	5.1	p(10)=42, p(54)=386155, p(100)=190569292	A	test_verify.py	yes
+58	5.1	all eight checks reproduced; 723 delta_q and Z bit-for-bit	A	test_verify.py	no
+59	5.2	no exact zeros to m = 92,000,003 (3,833,334 coefficients)	A	extended_verify.py	yes
+60	5.3	distribution zero row 1.052 / 1.018 / 1.132	A	paper_figures.py	no
+61	5.3	nonzero ranges 0.994-0.997 / 0.996-1.000 / 0.981-0.996	A	paper_figures.py	no
+62	5.3	sample sizes 17,640,743 / 17,640,699 / 2,714,016	A	paper_figures.py	no
+63	5.3	twelve nonzero classes uniform to within 1%	A	paper_figures.py	no
+64	5.4	kernel table, all m column: +0.2289 +0.1271 +0.0655 +0.0317	A	paper_figures.py	no
+65	5.4	kernel table, squarefree column: +0.2178 +0.1199 +0.0620 +0.0317	A	paper_figures.py	no
+66	6.1	B table, 10 half-decade windows	A	analyze.py	partly
+67	6.1	E(t) = 16.790*t^-0.3201 (all ten windows)	A	analyze.py	yes
+68	6.1	E(t) = 10.419*t^-0.2924 (six windows t >= 1e6)	A	analyze.py	yes
+69	6.1	1 - beta = 0.2759 lies outside both fits	A	paper_figures.py	no
+70	6.1	N(X) counts #{t<=X}: 352,805 / 3,528,117 / 35,281,442	A	paper_figures.py	yes
+71	6.1	N(X) zeros: 30,700 / 290,094 / 2,809,979	A	paper_figures.py	yes
+72	6.1	N(X) = 3,561 / 18,700 / 96,022	A	analyze.py	yes
+73	6.1	local slopes in 0.70-0.77	A	paper_figures.py	yes
+74	6.1	rms log-residual 0.063 vs 0.020 free fit	A	paper_figures.py	yes
+75	6.2	factorisation table 6 rows x (w1,w2,w3,mean,sd)	A	factorisation_check.py	partly
+76	6.2	E falls +0.1199 -> +0.0620 -> +0.0317	A	factorisation_check.py	yes
+77	6.3	top decade E = +0.0317, n = 31,753,325	A	analyze.py	yes
+78	6.3	delta_q / Z / f_q for 7 primes	A	analyze.py	partly
+79	6.3	123 of 723 primes with |Z| >= 3, chance 2	A	analyze.py	yes
+80	6.3	q=13 ranks 3rd of 723 by raw |f_q|	A	paper_figures.py	no
+81	6.3	|f_q|*q^0.405 = 2.61 at q=13, median 1.22, max 5.32 at q=2971	A	paper_figures.py	no
+82	6.3	q=13 at the 88th percentile	A	paper_figures.py	no
+83	6.4	alpha 0.405, sigma 0.0438, SE 0.00125	A	fit_alpha.py	yes
+84	6.4	68% [0.380, 0.430], 95% [0.355, 0.457]	A	fit_alpha.py	yes
+85	6.4	six d(-2logL) values 45.88 8.52 0.02 11.64 69.97 109.37	A	fit_alpha.py	yes
+86	6.4	2/5 is the only simple rational not rejected	A	corrected: 3/8 and 5/12 also consistent	no
+87	6.4	Waldspurger heuristic gives lambda_q in [-2,2] and exponent 1/2	C	Waldspurger	no
+88	6.4	earlier analysis of 60 primes gave alpha ~ 1/2 and Sato-Tate	A	mechanism_negatives.py (60-prime fit: alpha 0.495, 1/2 consistent)	no
+89	7	Ono-Skinner Corollary 4	C	literature	no
+90	7	Bruinier Theorem 1 hypotheses (l, Np(p-1)) = 1	C	literature	no
+91	7	Bruinier-Ono / Choi Property A bounds	C	literature	no
+92	7	Ahlgren-Boylan	C	literature	no
+93	7	Bellaiche-Green-Soundararajan >> sqrt(X)/loglog X	C	literature	no
+94	8	level 288 is untested	B	corrected: level 288 now searched	no
+95	9	distinguishing E(t) -> 0 from a limit near 0.01	B	hypothetical, not a measurement	no
+96	9	controls reach 3*10^7 in n vs 10^9 in m	A	pgen.c / eta11.c	no
+97	data	41,666,667 bytes for a13.bin	A	eta11.c	yes
+98	data	p(n) mod l for n <= 3e7, ten primes	A	pgen.c	no
+99	data	delta_q and Z for 723 primes, m >= 10^8, E = +0.0317	A	analyze.py	yes
+100	refs	eleven bibliographic entries with volume/year/pages	C	literature	no
+101	refs	OEIS A000041, A010819, A071750, A399067	C	OEIS	no
