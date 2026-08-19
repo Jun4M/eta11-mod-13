@@ -36,6 +36,10 @@ touching either file. When a number changes, change it in both, and add it to th
 `FIGURES` list if it is new. The recurring failure here is a number corrected in one
 document and left stale in the other.
 
+**The manuscript is not in this repository.** `paper/` is gitignored and lives only in
+the working tree, with its history in `~/coding/eta11-mod-13-full-history.bundle`. The
+rules below still apply to it; `paper/check_against_expected.py` runs locally.
+
 **A figure may only enter `results/EXPECTED.md` if a script in `src/` emitted it in the
 same run.** Not "could in principle be computed" — emitted, by a script, in the run
 being recorded. Transcribing a number into EXPECTED.md and into the paper makes

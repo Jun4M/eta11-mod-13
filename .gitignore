@@ -19,3 +19,9 @@ results/*.log
 __pycache__/
 *.pyc
 .DS_Store
+
+# The manuscript and its checker are kept out of the public repository: a paper
+# is not a thing to publish as a git tree. They live here locally and in
+# ~/coding/eta11-mod-13-full-history.bundle, which holds the history from before
+# paper/ was removed.
+paper/
