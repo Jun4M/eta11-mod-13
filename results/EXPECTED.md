@@ -151,6 +151,17 @@ The `5.62e8` row was also once suppressed by an off-by-one guard: `MMAX` is
 fit `N_exc(X) = 0.0296 * X^0.7241`; local slopes 0.70–0.77, mean 0.73.
 `beta = 3/4` is rejected (rms log-residual 0.063 against 0.020 for the free fit).
 
+At `MMAX = 10^10` every row above is unchanged and two are added:
+
+| X | n | zeros | N_exc |
+|---|---|---|---|
+| 3.16e9 | 111,569,767 | 8,803,158 | 220,868 |
+| 1e10 | 352,814,785 | 27,663,159 | 523,560 |
+
+fit `N_exc(X) = 0.0296 * X^0.7242`, local slopes 0.70–0.77 (mean 0.73), rms log-residual
+0.019 free and 0.079 at `beta = 3/4`, `1 - beta = 0.2758`. The exponent moves by 0.0001
+across a decade and the prefactor not at all.
+
 This is the stable exponent: it is a fit to a cumulative count, not to windowed
 differences, and it moves by less than 0.002 under the population change.
 
