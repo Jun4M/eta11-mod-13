@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Code and computed values for the vanishing of eta^11 modulo 13 along quadratic residue classes"
+abstract: >-
+  Measures how often the Fourier coefficients of eta^11 vanish modulo 13, and
+  how that frequency depends on quadratic residue classes. Computes a(m) mod 13
+  for all m <= 10^10, measures the excess density of vanishing along squarefree
+  kernels and its cumulative count exponent, and the factorisation of the
+  Legendre-class dependence over 2260 auxiliary primes. Includes independent
+  reimplementations, structural invariants, and a negative result for the
+  Shimura lift at every level dividing 288.
+authors:
+  - family-names: Lee
+    given-names: Junho
+    orcid: "https://orcid.org/0009-0008-1540-7694"
+    affiliation: "Kyung Hee University"
+license: MIT
+version: 1.0.0
+date-released: 2026-08-19
+repository-code: "https://github.com/Jun4M/eta11-mod-13"
+keywords:
+  - number theory
+  - partition function
+  - modular forms
+  - half-integral weight
+  - congruences
+  - eta quotients
