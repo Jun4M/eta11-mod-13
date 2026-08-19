@@ -13,7 +13,7 @@ What actually changed, block by block:
 
 - **δ_q table** — essentially unchanged. The 2026-08-15 table was already measured
   with `13|m` excluded; it was `analyze.py` that disagreed with it, emitting values
-  ~1.24x larger for every `q ≠ 13`. The corrected code now reproduces that table.
+  1.198x larger for every `q ≠ 13`. The corrected code now reproduces that table.
 - **N_exc** — superseded. `N_exc(10^9) = 123,563` counted the `13|m` stratum; it is
   `96,022` without it.
 - **`|Z| >= 3` count** — superseded, `181 of 723` -> `123 of 723`. The old count came
@@ -21,7 +21,7 @@ What actually changed, block by block:
   printed above it.
 - **fit_alpha block** — superseded; it too was run on the mixed δ_q.
 - **factorisation table** — superseded; it used the mixed δ_q, so every `q ≠ 13` row
-  was ~1.24x too large.
+  was 1.198x too large.
 
 `data/delta_q_consistent.json` is the reference measurement for this population;
 a regenerated `results/delta_q.json` reproduces it bit-exactly on all 723 primes,
@@ -152,15 +152,21 @@ alpha_hat = 0.405   sigma_hat = 0.0438
   0.5000  1/2  Euler-factor / Sato-Tate   d(-2logL) =   11.64  REJECTED
   0.3333  1/3                             d(-2logL) =    8.52  REJECTED
   0.2500  1/4                             d(-2logL) =   45.88  REJECTED
+  0.3750  3/8                             d(-2logL) =    1.30  consistent
   0.4000  2/5                             d(-2logL) =    0.02  consistent
+  0.4167  5/12                            d(-2logL) =    0.26  consistent
   0.6667  2/3                             d(-2logL) =   69.97  REJECTED
   0.7500  3/4                             d(-2logL) =  109.37  REJECTED
 ```
 
+`3/8` and `5/12` were added on 2026-08-19. All three of `3/8`, `2/5`, `5/12` are
+consistent, so `2/5` is not distinguished — the earlier claim that it was the only
+surviving simple rational came from a candidate list that omitted its two neighbours.
+
 The population change moved `alpha` from 0.407 to 0.405 and left the conclusion
 intact: `2/5` is still the only surviving simple rational, `1/2` still rejected.
-`sigma_hat` moved 0.0543 -> 0.0438, which is just the ~1.24 amplitude inflation
-coming out.
+`sigma_hat` moved 0.0543 -> 0.0438, which is just the 1.198 amplitude inflation coming
+out (0.0543/1.198 = 0.0453, the residual difference being the 7% change in n).
 
 ## Factorisation check — src/factorisation_check.py
 
@@ -240,6 +246,70 @@ share, biased upward at small sample size, and it decays toward `1/l`:
 The 2026-08-15 draft quoted `3.19 / 2.78 / 2.81 / 2.55` with no bound named; those
 correspond to no bound this script reproduces and are withdrawn.
 
+## Standing of q = 13, and the nonzero classes
+
+From `src/paper_figures.py`:
+
+```
+  raw |f_q| rank of q=13: 3 of 723
+  trend-divided |f_q|*q^0.405: q=13 gives 2.61, median 1.21, max 5.32 at q=2971
+  rank 85 of 723 -> 88th percentile
+  max deviation of a nonzero residue class from 1: 0.0040
+```
+
+The median is `1.2146`; an earlier draft rounded it to `1.22`.
+
+## Audit of 2026-08-19 — src/invariants.py, src/independent_check.py, src/paper_figures.py
+
+Every numeric claim in `paper/manuscript.md` was classified (`paper/claims_audit.tsv`,
+101 claims): 57 class A (script-emitted and checker-enforced), 33 class B (produced by
+no script), 11 class C (literature). Three scripts were added so that class B is empty
+of anything the repo can compute.
+
+**Brute force at m <= 10^4.** `prod (1-q^k)^11` built by literal polynomial
+multiplication in exact integers — no pentagonal number theorem, no modular reduction,
+no blocking — reproduces `a13.bin` on all 417 coefficients. The unreduced head is
+`[1, -11, 44, -55, -110]`. The squarefree-kernel sieve, whose modular-inverse
+progression offset is the likeliest place for an off-by-one, agrees with direct
+trial-division factorisation on all 41,667 values to `m <= 10^6`, and on a random
+sample of 20,000 spanning the full range. E, N_exc and delta_5, delta_7 computed by
+pure-Python loops match the numpy pipeline exactly.
+
+**Invariants** (`src/invariants.py`, all pass):
+
+```
+[PASS] kernel: sq == 1 iff t == m, and t*sq^2 == m for every m
+[PASS] E(t) windows partition their span exactly (no gap, no overlap)
+[PASS] N(X) = zeros - n/13 reproduces at every X, counts monotone in X
+[PASS] delta_q and E share one population
+[PASS] B(QR), B(NQR) reconcile with B(all) at weights n1, n2
+[PASS] delta_q negates under swap of the two classes
+[PASS] the 13 residue classes of a(m) partition the population
+[PASS] 13|m and 13 nmid m strata partition the squarefree top decade
+```
+
+Invariant 4 is not vacuous: applied to the superseded pairing (delta_q on a population
+including `13|m`, normalised by an E without it) it fails by `8.18e-03` against a
+tolerance of `1e-12`, and it localises the fault to `q != 13` — for `q = 13` the gap is
+`2.22e-16`, because that class split always excluded `13|m`. The bug that produced
+eleven corrections would have been caught by one assertion.
+
+**Independent reimplementation** (`src/independent_check.py`, all pass): kernels by
+trial-division factorisation rather than modular-inverse progressions; Legendre symbols
+by Euler's criterion rather than a table of squares; every rate as an exact integer
+ratio rather than a float mean; and `alpha` from binned deconvolved moments rather than
+a profiled likelihood, giving `0.420` against the ML `0.405`.
+
+**Result: class A is clean.** Every script-produced figure survived independent
+reimplementation, all eight invariants, and brute force at small range. The three
+figures the audit corrected were all class B — see the corrections log.
+
+`src/paper_figures.py` now emits the figures that no script produced: the section 5.3
+distribution, the section 5.4 kernel table, the N(X) census with its counts, the local
+slopes and residuals, the spread of `delta_q/E`, the standing of `q = 13`, the `t = 155`
+class and the 426 square classes, the inflation factor, and the Shimura null
+distribution (seeded, so reproducible).
+
 ## Shimura lift search — src/shimura288.gp
 
 Run 2026-08-19 with PARI/GP 2.17.4, `gp -s 4000000000 -q src/shimura288.gp`, about
@@ -265,7 +335,7 @@ distribution of the *maximum* over many candidates is:
 |---|---|---|
 | 1 (a single form) | 0.091 | 0.262 |
 | 45 (level 288) | 0.313 | 0.412 |
-| 142 (whole sweep) | 0.358 | 0.444 |
+| 142 (whole sweep) | 0.359 | 0.444 |
 
 Level 288's 0.294 is **below** the null median for 45 candidates, and the global 0.377
 is essentially at the null median for 142. So no level shows any evidence of the lift,

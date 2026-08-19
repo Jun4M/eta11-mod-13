@@ -36,6 +36,19 @@ touching either file. When a number changes, change it in both, and add it to th
 `FIGURES` list if it is new. The recurring failure here is a number corrected in one
 document and left stale in the other.
 
+**A figure agreeing with EXPECTED.md is not a verified figure.**
+`check_against_expected.py` compares two documents; it cannot catch a number that is
+wrong in both, and the population-mixing bug was exactly that. Before trusting any
+figure, ask which script regenerates it — `paper/claims_audit.tsv` records that for all
+101 numeric claims. A new figure needs a script, an entry in that file, and ideally an
+invariant in `src/invariants.py`. The three audit scripts are:
+
+```bash
+python3 src/invariants.py a13.bin          # 8 assertions that must reconcile
+python3 src/independent_check.py a13.bin   # different algorithms, not refactors
+python3 src/paper_figures.py a13.bin       # figures no other script emits
+```
+
 **Do not overclaim.** The history of this project is a sequence of claims that
 looked clean at small sample size and dissolved at larger sample size:
 `q^(-1/2)` scaling, Sato–Tate distribution, and a supposed special role for

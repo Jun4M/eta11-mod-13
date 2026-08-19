@@ -99,6 +99,9 @@ src/factorisation_check.py   f_q across three windows in t
 src/extended_verify.py       wide-range numpy and 2^31-1 checks (~12 min, one-off)
 src/pgen.c                   p(n) mod l for the section-4 controls
 src/controls.py              the three tables of section 4
+src/invariants.py            structural assertions that must reconcile
+src/independent_check.py     reimplementation by different algorithms
+src/paper_figures.py         every paper figure no other script emits
 src/shimura288.gp    PARI/GP search for the Shimura lift
 paper/manuscript.md          the write-up
 paper/check_against_expected.py  asserts the paper and EXPECTED.md agree
@@ -125,6 +128,10 @@ python3 src/test_verify.py a13.bin      # must print "all checks passed"
 python3 src/analyze.py a13.bin
 python3 src/fit_alpha.py results/delta_q.json
 python3 src/factorisation_check.py a13.bin
+python3 src/invariants.py a13.bin           # must print "all invariants hold"
+python3 src/independent_check.py a13.bin
+python3 src/paper_figures.py a13.bin
+python3 paper/check_against_expected.py     # paper and EXPECTED.md must agree
 ```
 
 For the section-4 controls:
