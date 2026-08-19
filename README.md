@@ -178,6 +178,14 @@ gp -s 4000000000 -q src/shimura288.gp
 
 Expected output is in `results/EXPECTED.md`.
 
+## Licence
+
+Code (`src/`, `paper/*.py`) is under the MIT licence in `LICENSE`, identical to the one
+in `erdos126`. The data files (`data/`, `results/`) and `paper/manuscript.md` are under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — MIT's text grants rights in
+"the Software" and does not fit a manuscript, and CC BY is what Zenodo and the preprint
+servers expect for one.
+
 ## Background
 
 - Folsom, Kent, Ono, *ℓ-adic properties of the partition function*, Adv. Math. 229 (2012).
