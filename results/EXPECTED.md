@@ -88,8 +88,14 @@ standard error of 0.15 on `B`.
 
 **MMAX-independence, verified directly.** Every window shared between the `MMAX = 10^9`
 and `MMAX = 10^10` runs is identical in both `n` and its zero count. The two windows
-visible only at `10^10`: `[1e9, 1e9.5)` gives `B = 1.0213`, `n = 76,288,325`, and
-`[1e9.5, 1e10)` gives `B = 1.0163`, `n = 241,245,018`.
+visible only at `10^10`: `[1e9, 1e9.5)` gives `B = 1.0213`, `E = +0.0213`,
+`n = 76,288,325`, and `[1e9.5, 1e10)` gives `B = 1.0163`, `E = +0.0163`,
+`n = 241,245,018`.
+
+The top four half-decades give `E = +0.0399, +0.0290, +0.0213, +0.0163`, successive
+ratios 0.73, 0.73, 0.77 against 0.724 predicted by `t^(-0.28)` over a half-decade. There
+is no flattening, so a limit for `E(t)` above about `0.016` is excluded by the data
+rather than by extrapolation.
 
 ```
   fit [all windows  , 9 windows]: E(t) = 6.773 * t^(-0.2685)
