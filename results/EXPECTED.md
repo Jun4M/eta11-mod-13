@@ -185,6 +185,61 @@ superseded table used the population sd (ddof=0), which is why `q = 13`'s row sh
 unchanged by the population fix, as expected — its own class split always excluded
 `13|m`.
 
+## Section 4 controls — src/pgen.c and src/controls.py
+
+```bash
+gcc -O3 -march=native -funroll-loops -o pgen src/pgen.c
+./pgen 30000000            # 61 s, 240 MB, writes res_<l>.bin (11 MB total)
+python3 src/controls.py    # 1.0 s at the default bounds
+```
+
+`pgen` is cross-checked against `a13.bin`: `res_13.bin` satisfies
+`p(n) = 11*a(m) (mod 13)` on all 2,307,692 values, which is the same reduction
+`test_verify.py` checks against exact big-integer `p(n)`.
+
+Default bounds are `TMAX = 400000`, `FIT_MAX = 60`; both are printed by every run and
+overridable with `--tmax` / `--fitmax`.
+
+```
+    l | delta | m mod 24 | worst purity |   1/l   | verdict
+    13 |    6  |    11    |   100.00%    |  7.69% | EIGENFORM
+    17 |    5  |     7    |   100.00%    |  5.88% | EIGENFORM
+    19 |    4  |     5    |   100.00%    |  5.26% | EIGENFORM
+    23 |    1  |     1    |   100.00%    |  4.35% | EIGENFORM
+    29 |   23  |    19    |   100.00%    |  3.45% | EIGENFORM
+    31 |   22  |    17    |   100.00%    |  3.23% | EIGENFORM
+    37 |   17  |    11    |     3.06%    |  2.70% | no
+    41 |   12  |     7    |     2.69%    |  2.44% | no
+    43 |    9  |     5    |     2.62%    |  2.33% | no
+    47 |    2  |     1    |     2.43%    |  2.13% | no
+
+    l |  k | predicted e | fitted e | character rule holds? | primes used
+    13 |  5 |      4      |       4  |        YES            |   14
+    17 |  7 |      6      |       6  |        YES            |   14
+    19 |  8 |      7      |       7  |        YES            |   14
+    23 | 10 |      9      |       9  |        YES            |   14
+    29 | 13 |     12      |      12  |        YES            |   14
+    31 | 14 |     13      |      13  |        YES            |   14
+```
+
+Tables 2 and 3 hold at 6/6 and do not move with the bounds: at `--fitmax 80` the same
+six rows read YES over 19 primes, and the fitted exponents are unchanged at every
+`TMAX` tested.
+
+**The purity column is the one bound-dependent figure here.** It is a largest-class
+share, biased upward at small sample size, and it decays toward `1/l`:
+
+| TMAX | l=37 | l=41 | l=43 | l=47 |
+|---|---|---|---|---|
+| 50,000 | 3.53% | 3.23% | 3.23% | 3.02% |
+| 150,000 | 3.27% | 2.91% | 2.85% | 2.52% |
+| 400,000 | 3.06% | 2.69% | 2.62% | 2.43% |
+| 600,000 | 3.02% | 2.69% | 2.63% | 2.40% |
+| limit `1/l` | 2.70% | 2.44% | 2.33% | 2.13% |
+
+The 2026-08-15 draft quoted `3.19 / 2.78 / 2.81 / 2.55` with no bound named; those
+correspond to no bound this script reproduces and are withdrawn.
+
 ## Shimura lift search (levels 2..144)
 
 Maximum |correlation| by level: 2:0.09, 3:0.05, 4:0.02, 6:0.07, 8:0.09, 9:0.21,

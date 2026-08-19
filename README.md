@@ -95,6 +95,8 @@ src/analyze.py       produces E(t), the excess count, and delta_q
 src/fit_alpha.py     maximum-likelihood fit of the delta_q exponent
 src/factorisation_check.py   f_q across three windows in t
 src/extended_verify.py       wide-range numpy and 2^31-1 checks (~12 min, one-off)
+src/pgen.c                   p(n) mod l for the section-4 controls
+src/controls.py              the three tables of section 4
 src/shimura288.gp    PARI/GP search for the Shimura lift
 paper/manuscript.md          the write-up
 paper/check_against_expected.py  asserts the paper and EXPECTED.md agree
@@ -122,6 +124,17 @@ python3 src/analyze.py a13.bin
 python3 src/fit_alpha.py results/delta_q.json
 python3 src/factorisation_check.py a13.bin
 ```
+
+For the section-4 controls:
+
+```bash
+gcc -O3 -march=native -funroll-loops -o pgen src/pgen.c
+./pgen 30000000            # 61 s, 240 MB, writes res_<l>.bin
+python3 src/controls.py    # 1.0 s
+```
+
+`controls.py` prints the kernel bound it used. The purity percentages for `ℓ ≥ 37`
+move with that bound — never quote one without it.
 
 On macOS `gcc` is the Apple clang shim and does not accept `-fopenmp`; use
 `clang -O3 -march=native -Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include

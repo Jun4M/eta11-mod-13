@@ -8,7 +8,12 @@ Reproduces the three tables of section 4 from res_<l>.bin.
   Table 3  the character eps_l(p), predicted to be -(p|3)*(-1|p)^(k+1)
 
 Run:  python3 src/controls.py            (expects res_<l>.bin in the cwd)
+      python3 src/controls.py --tmax 150000 --fitmax 40
 Time: a few minutes.
+
+The purity percentages of Table 1 for l >= 37 are finite-sample estimates and
+move with the kernel bound. Every run prints the bounds it used; do not quote a
+purity figure without them.
 """
 import sys, math, os
 import numpy as np
@@ -16,8 +21,16 @@ from collections import Counter
 
 PRIMES = [13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
 AUX    = [5, 7, 11, 17, 19]          # auxiliary p used for the purity test
-TMAX   = 150000                      # kernel bound; raising it does not change any table
-FIT_P  = [p for p in range(5, 40)]   # auxiliary p used for exponent/character
+
+# Kernel bound. The dichotomy of Table 1 (100% vs about 1/l) and the whole of
+# Tables 2 and 3 are insensitive to it. The purity PERCENTAGES for l >= 37 are
+# not: they are finite-sample estimates of an equidistribution and they move.
+TMAX    = 400000
+FIT_MAX = 60                         # auxiliary p < FIT_MAX for exponent/character
+for _i, _a in enumerate(sys.argv):
+    if _a == "--tmax":   TMAX = int(sys.argv[_i+1])
+    if _a == "--fitmax": FIT_MAX = int(sys.argv[_i+1])
+FIT_P  = [p for p in range(5, FIT_MAX)]
 
 def isprime(x):
     if x < 2: return False
@@ -27,13 +40,19 @@ def isprime(x):
         d += 1
     return True
 
-def sqfree(x):
-    y, d = x, 2
-    while d*d <= y:
-        if y % (d*d) == 0: return False
-        if y % d == 0: y //= d
-        d += 1
-    return True
+def squarefree_sieve(N):
+    """SF[t] is True iff t is squarefree.
+
+    Computed once at import. The trial-division test this replaces was re-run
+    for every (l, p) pair over the same t values and dominated the runtime."""
+    sf = np.ones(N + 1, dtype=bool)
+    i = 2
+    while i * i <= N:
+        sf[i*i :: i*i] = False
+        i += 1
+    return sf
+
+SF = squarefree_sieve(TMAX + 1)
 
 def load(l):
     """A_l(m) = p((l*m+1)/24) mod l, for m in the progression m0 + 24*Z."""
@@ -51,7 +70,9 @@ def A_of(res, m0, mmax, m):
 
 # ---------------------------------------------------------------- table 1
 print("=== Table 1: is A(t p^2)/A(t) constant on each class of (t|p)? ===")
-print("Worst case over p in", AUX, "and over the classes (t|p) = +1, -1.\n")
+print("Worst case over p in", AUX, "and over the classes (t|p) = +1, -1.")
+print(f"Kernel bound TMAX = {TMAX:,}.  Purity for l >= 37 is a finite-sample")
+print("estimate at this bound and moves with it.\n")
 print("    l | delta | m mod 24 | worst purity |   1/l   | verdict")
 print("  " + "-"*62)
 for l in PRIMES:
@@ -67,7 +88,7 @@ for l in PRIMES:
         g = {1: Counter(), -1: Counter()}
         t = cls if cls > 0 else 24
         while t*p*p <= mmax and t < TMAX:
-            if sqfree(t):
+            if SF[t]:
                 a0 = A_of(res, m0, mmax, t)
                 if a0:
                     v = A_of(res, m0, mmax, t*p*p)
@@ -86,7 +107,8 @@ for l in PRIMES:
 
 # ------------------------------------------------------- tables 2 and 3
 print("\n=== Table 2/3: Hecke exponent and character, for the primes where it holds ===")
-print("Prediction: exponent e = k-1 and eps_l(p) = -(p|3)*(-1|p)^(k+1), k = (l-3)/2.\n")
+print("Prediction: exponent e = k-1 and eps_l(p) = -(p|3)*(-1|p)^(k+1), k = (l-3)/2.")
+print(f"Kernel bound TMAX = {TMAX:,}, auxiliary primes 5 <= p < {FIT_MAX}.\n")
 print("    l |  k | predicted e | fitted e | character rule holds? | primes used")
 print("  " + "-"*74)
 for l in [13, 17, 19, 23, 29, 31]:
@@ -102,7 +124,7 @@ for l in [13, 17, 19, 23, 29, 31]:
         g = {1: Counter(), -1: Counter()}
         t = cls if cls > 0 else 24
         while t*p*p <= mmax and t < TMAX:
-            if sqfree(t):
+            if SF[t]:
                 a0 = A_of(res, m0, mmax, t)
                 if a0:
                     v = A_of(res, m0, mmax, t*p*p)
@@ -111,6 +133,7 @@ for l in [13, 17, 19, 23, 29, 31]:
                         if r:
                             lg = 1 if pow(r, (p-1)//2, p) == 1 else -1
                             g[lg][(v*inv[a0]) % l] += 1
+            t += 24
         if min(sum(g[1].values()), sum(g[-1].values())) < 50: continue
         rp = g[1].most_common(1)[0][0]
         rm = g[-1].most_common(1)[0][0]
@@ -137,4 +160,4 @@ for l in [13, 17, 19, 23, 29, 31]:
             if eps != -leg3 * (m1**(k+1)): holds = False
     print(f"  {l:>4} | {k:>2} |     {k-1:>2}      |    {str(fitted):>4}  |"
           f"        {'YES' if (holds and fitted == k-1) else 'no':<4}           |   {used}")
-print("\nDone.")
+print(f"\nDone.  TMAX = {TMAX:,}, FIT_MAX = {FIT_MAX}.")

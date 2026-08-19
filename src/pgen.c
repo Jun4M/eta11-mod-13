@@ -15,8 +15,12 @@
  * Memory: 8 bytes per n, so about 240 MB at n = 3e7.
  * Time:   roughly 2 minutes at n = 3e7 on one core.
  *
- * Overflow: the accumulator sums at most ~11500 terms, each below
- * M = 1.4e13, so it stays under 1.7e17 -- comfortably inside int64.
+ * Overflow: M = 13*17*...*47 = 266,186,053,068,611 (2.66e14). At N = 3e7 there
+ * are 8943 pentagonal terms, so the accumulator stays under 8943*M = 2.38e18,
+ * inside int64 (9.22e18) with a factor 3.9 to spare. That margin is NOT large:
+ * the term count grows like 2*sqrt(2N/3), so this overflows silently for
+ * N > 4.5e8. Reduce M (drop primes) or accumulate in __int128 before going
+ * past that.
  */
 #include <stdio.h>
 #include <stdlib.h>
