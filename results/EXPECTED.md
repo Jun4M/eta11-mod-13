@@ -252,6 +252,48 @@ candidates off the 0.0025 grid, and they were being evaluated up to 0.00083 away
 723 primes `1/3` moves 8.52 -> 8.31, `5/12` 0.26 -> 0.23, `2/3` 69.97 -> 69.60. The
 on-grid candidates are unaffected.
 
+## delta_q at MMAX = 10^10 (src/analyze.py on a13_1e10.bin)
+
+7035 s, peak RSS 7.13 GB. Top decade is now `t in [1e9, 1e10)`:
+`E = +0.0175`, `n = 317,533,343`; excluded `13|m` stratum `E = +0.0578`,
+`n = 24,425,646`. 723 primes, **205 with |Z| >= 3** (chance 2.0).
+
+```
+n = 723 primes, q in [5, 5483], measurement SE = 0.00039
+alpha_hat = 0.430   sigma_hat = 0.0225
+  68% interval: [0.407, 0.455]
+  95% interval: [0.382, 0.482]
+  0.2500  1/4    d(-2logL) =   69.29  REJECTED
+  0.3333  1/3    d(-2logL) =   17.36  REJECTED
+  0.3750  3/8    d(-2logL) =    5.30  REJECTED
+  0.4000  2/5    d(-2logL) =    1.55  consistent
+  0.4167  5/12   d(-2logL) =    0.32  consistent
+  0.5000  1/2    d(-2logL) =    6.74  REJECTED
+  0.6667  2/3    d(-2logL) =   63.20  REJECTED
+  0.7500  3/4    d(-2logL) =  105.56  REJECTED
+```
+
+**The 95% width does not narrow with MMAX.** Three measurements: `0.405` [0.355,0.457]
+width 0.102 at 723 primes on `m <= 1e9`; `0.427` [0.390,0.465] width 0.075 at 2260
+primes on the same data; `0.430` [0.382,0.482] width 0.100 at 723 primes on `m <= 1e10`.
+A fourth estimator, binned deconvolved moments, gives `0.420` on the first.
+
+What controls the width, measured:
+
+| probe | result |
+|---|---|
+| SE x 1.0, 723 primes | width 0.100 |
+| SE x 0.3, 723 primes | width 0.085 |
+| SE x 0.1, 723 primes | width 0.082 |
+| 180 primes | width 0.202 |
+| 361 primes | width 0.148 |
+| 723 primes | width 0.100 |
+| 2260 primes | width 0.075 |
+
+A tenfold cut in the measurement error moves the width by 0.018; the prime count gives a
+clean `1/sqrt(n)`. The estimator is limited by how many auxiliary primes exist, not by
+the range of the computation, so extending `m` moves `alpha` without improving it.
+
 ## Factorisation check — src/factorisation_check.py
 
 `f_q = delta_q / E` across three decade windows in t, same population in each:
