@@ -2,7 +2,7 @@
 # Once a 40 MB blob enters history it is there permanently.
 # a13.bin  : ./eta11 1000000000 11   (~7 min on 8 cores)
 # state.bin: checkpoint, tied to a specific MMAX — delete it when MMAX changes
-a13.bin
+a13*.bin
 state.bin
 eta11
 # res_<l>.bin: p(n) mod l for n <= NMAX; ./pgen 30000000 regenerates in ~2 min

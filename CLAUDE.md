@@ -56,22 +56,17 @@ looks like a new structural result, assume it is known until checked.
 
 ## Priority tasks
 
-### 1. Level 288 Shimura lift (highest value)
+### 1. ~~Level 288 Shimura lift~~ — DONE 2026-08-19, clean negative
 
-`src/shimura288.gp` tests whether a weight-10 newform has normalised eigenvalues
-`a_q/q^(9/2)` correlating with the measured `f_q`. Levels up to 144 are done and all
-correlate at noise level. Level 288 needs a large stack:
+All 17 levels dividing 288 searched, 142 form–embedding pairs. Max |correlation| 0.294
+at level 288, 0.377 overall, both at or below the null median for their candidate
+counts. `mfinit([288,10],0)` fits in a 4 GB stack (`gp -s 4000000000`); PARI/GP 2.17.4
+via `brew install pari`. Do not re-open this without a new idea about what `f_q` is —
+re-running the same correlation will not change the answer.
 
-```bash
-gp -s 4000000000 -q src/shimura288.gp
-```
-
-`mfinit([288,10],0)` is the expensive call. If it exhausts memory, try
-`default(parisizemax, ...)`, or compute the newspace in pieces with `mfsplit`.
-
-A correlation above 0.9 identifies the lift and probably settles the mechanism.
-Below about 0.5 is noise. **Report the actual maximum, whatever it is** — a clean
-negative result is valuable here.
+When comparing against `f_q`, note that `results/fq_for_pari.txt` must be regenerated
+from `results/delta_q.json`; the version shipped before 2026-08-19 predated the
+population fix and was not a rescaling of the corrected values.
 
 ### 2. Extend to `m ≤ 10^10`
 

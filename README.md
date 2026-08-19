@@ -75,10 +75,12 @@ lower bound for non-vanishing is `≫ √X/log log X` (Bellaïche–Green–Soun
 1. **What is `f_q`?** The `q^(−1/2)` prediction from a naive Euler-factor /
    Sato–Tate argument is rejected at 11.6 units of `−2log L`. `2/5` fits, with no
    explanation. This is the central mystery.
-2. **Identify the Shimura lift.** Weight-10 newforms of level dividing 144 have been
-   checked and all correlate at noise level (max 0.41). **Level 288 has not been
-   checked** — it is the natural candidate and needs a large PARI stack.
-   See `src/shimura288.gp`.
+2. ~~**Identify the Shimura lift.**~~ **Closed, negative.** All 17 levels dividing 288
+   have now been searched — 142 form–embedding pairs of weight-10 newforms. Maximum
+   |correlation| with `f_q` is 0.294 at level 288 and 0.377 overall, against a null
+   median of 0.313 and 0.358 for those candidate counts. The lift is not a newform of
+   level dividing 288, or `f_q` is not a normalised eigenvalue sequence.
+   See `src/shimura288.gp` and `results/EXPECTED.md`.
 3. **Push to `m ≤ 10¹⁰`.** Would tighten both exponents. Sample size for `f_q`
    scales as `n·E²  ∝ T^0.44`, so a decade in `m` buys a factor 1.7 in precision.
 4. **Is `E(t) → 0`?** Monotone decrease over five decades with no flattening, but a

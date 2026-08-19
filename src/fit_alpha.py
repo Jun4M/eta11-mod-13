@@ -36,7 +36,8 @@ for lvl, lab in [(0.5, "68%"), (2.0, "95%")]:
     print(f"  {lab} interval: [{ok.min():.3f}, {ok.max():.3f}]")
 print("\ncandidate exponents (chi^2 with 1 dof; reject above 3.84):")
 for cand, lab in [(0.5, "1/2  Euler-factor / Sato-Tate"), (1/3, "1/3"),
-                  (0.25, "1/4"), (0.4, "2/5"), (2/3, "2/3"), (0.75, "3/4")]:
+                  (0.25, "1/4"), (3/8, "3/8"), (0.4, "2/5"), (5/12, "5/12"),
+                  (2/3, "2/3"), (0.75, "3/4")]:
     j = int(np.abs(al-cand).argmin())
     print(f"  {cand:.4f}  {lab:<30}  d(-2logL) = {2*(ll[j]-ll[i]):7.2f}"
           f"  {'consistent' if 2*(ll[j]-ll[i]) < 3.84 else 'REJECTED'}")

@@ -240,12 +240,41 @@ share, biased upward at small sample size, and it decays toward `1/l`:
 The 2026-08-15 draft quoted `3.19 / 2.78 / 2.81 / 2.55` with no bound named; those
 correspond to no bound this script reproduces and are withdrawn.
 
-## Shimura lift search (levels 2..144)
+## Shimura lift search — src/shimura288.gp
 
-Maximum |correlation| by level: 2:0.09, 3:0.05, 4:0.02, 6:0.07, 8:0.09, 9:0.21,
-12:0.21, 16:0.14, 18:0.41, 24:0.21, 32:0.16, 36:0.08, 48:0.19, 72:0.16, 96:0.40,
-144:0.35. **Level 288 not computed.**
+Run 2026-08-19 with PARI/GP 2.17.4, `gp -s 4000000000 -q src/shimura288.gp`, about
+five minutes. `mfinit([288,10],0)` completed inside the 4 GB stack; no `mfsplit`
+decomposition or trace-form screen was needed.
 
-Not re-run on 2026-08-18 (PARI/GP not installed). Unaffected by the population fix
-regardless: the search scores by correlation, which is invariant under the
-q-independent rescaling of `f_q`.
+Correlated against the consistent-population `f_q` over the 60 primes `5 <= q <= 293`
+(`results/fq_for_pari.txt`, regenerated from `results/delta_q.json`).
+
+Maximum |correlation| by level: 2:0.030, 3:0.098, 4:0.064, 6:0.127, 8:0.153, 9:0.202,
+12:0.141, 16:0.137, 18:0.377, 24:0.151, 32:0.312, 36:0.133, 48:0.264, 72:0.271,
+96:0.339, 144:0.276, **288:0.294**.
+
+**Level 288 is a clean negative.** Its maximum is 0.2935 (form 7, embedding 1, signed
+-0.2935) over 45 (form, embedding) pairs; the global maximum over all 142 pairs is
+0.3772 at level 18 form 4.
+
+That is not merely below the 0.5 noise threshold — it is at or below what noise alone
+produces. At `n = 60` points a single correlation has SE `0.130`, and the null
+distribution of the *maximum* over many candidates is:
+
+| candidates | null median max \|corr\| | null 95th pct |
+|---|---|---|
+| 1 (a single form) | 0.091 | 0.262 |
+| 45 (level 288) | 0.313 | 0.412 |
+| 142 (whole sweep) | 0.358 | 0.444 |
+
+Level 288's 0.294 is **below** the null median for 45 candidates, and the global 0.377
+is essentially at the null median for 142. So no level shows any evidence of the lift,
+and the previously reported "max 0.41" across levels <= 144 was itself within noise.
+
+The earlier per-level maxima (2:0.09, 3:0.05, ... 144:0.35) are superseded: they were
+scored against a `results/fq_for_pari.txt` that predated the population fix. That file
+was not a rescaling of the corrected `f_q` — the ratio ranges over -0.058 to 2.216
+across the 60 primes, including a sign change — so an earlier note claiming the search
+was immune by scale-invariance was wrong in its premise. Re-running on the corrected
+`f_q` moves level 288 from 0.288 to 0.294 and the global maximum from 0.368 to 0.377,
+changing no conclusion.
