@@ -75,6 +75,15 @@ class in 2^24 chunks. The earlier int64 version needed 21 GB at `MMAX = 10^10`. 
 about 2.2 GB at `10^9` and 6 GB at `10^10`. There is one implementation of the analysis;
 keep it that way — two is how the population bug lasted as long as it did.
 
+**A quantity claimed to depend only on t must be checked at two ranges.** The E(t)
+window table was correctly emitted by `analyze.py`, recorded in EXPECTED.md and quoted
+in the paper, and was still measuring the wrong thing: it took every `m` whose kernel
+fell in the window, so it drifted with MMAX (the `[1e5,1e5.5)` window read 1.2592 at
+`10^9` and 1.6269 at `10^10`). No invariant, no reimplementation and no brute force at
+small range could catch that — only a second computation at a different range did.
+Invariant 12 now enforces the property that makes the quantity range-free: every `m`
+counted in a window must lie in that window, checked against what `analyze.py` wrote.
+
 **Do not overclaim.** The history of this project is a sequence of claims that
 looked clean at small sample size and dissolved at larger sample size:
 `q^(-1/2)` scaling, Sato–Tate distribution, and a supposed special role for

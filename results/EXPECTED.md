@@ -66,36 +66,65 @@ coefficients. Takes about 12 minutes; not part of the routine run.
 
 ## E(t), half-decade windows
 
+**Restated on squarefree kernels 2026-08-19.** For squarefree `m` the kernel is `m`
+itself, so a window's population is fixed once the window is, and these values do not
+depend on `MMAX`. `analyze.py` emits them as
+`w = sf & (m >= lo) & (m < hi) & (leg13 != 0)`.
+
 | t (geometric centre) | B | E | n |
 |---|---|---|---|
-| 1.78e4 | 1.7614 | +0.7614 | 53,249 |
-| 5.62e4 | 1.7460 | +0.7460 | 95,008 |
-| 1.78e5 | 1.2592 | +0.2592 | 169,680 |
-| 5.62e5 | 1.2119 | +0.2119 | 301,540 |
-| 1.78e6 | 1.1576 | +0.1576 | 504,556 |
-| 5.62e6 | 1.1104 | +0.1104 | 914,243 |
-| 1.78e7 | 1.0763 | +0.0763 | 1,892,938 |
-| 5.62e7 | 1.0579 | +0.0579 | 2,707,995 |
+| 5.62e4 | 1.3361 | +0.3361 | 2,413 |
+| 1.78e5 | 1.2466 | +0.2466 | 7,623 |
+| 5.62e5 | 1.2087 | +0.2087 | 24,125 |
+| 1.78e6 | 1.1547 | +0.1547 | 76,287 |
+| 5.62e6 | 1.1089 | +0.1089 | 241,244 |
+| 1.78e7 | 1.0748 | +0.0748 | 762,869 |
+| 5.62e7 | 1.0579 | +0.0579 | 2,412,443 |
 | 1.78e8 | 1.0399 | +0.0399 | 7,628,828 |
 | 5.62e8 | 1.0290 | +0.0290 | 24,124,497 |
 
-The last row was previously suppressed by an off-by-one guard: `MMAX` is
-`m[-1] = 999,999,995`, five short of `10^9`, although `999,999,995` is in fact the
-largest `m ≡ 11 (mod 24)` below `10^9`, so the window is fully covered.
+The `[1e4, 1e4.5)` window is dropped by the `n >= 2000` guard: 760 kernels give a
+standard error of 0.15 on `B`.
 
-Two power-law fits, over different window sets:
+**MMAX-independence, verified directly.** Every window shared between the `MMAX = 10^9`
+and `MMAX = 10^10` runs is identical in both `n` and its zero count. The two windows
+visible only at `10^10`: `[1e9, 1e9.5)` gives `B = 1.0213`, `n = 76,288,325`, and
+`[1e9.5, 1e10)` gives `B = 1.0163`, `n = 241,245,018`.
 
 ```
+  fit [all windows  , 9 windows]: E(t) = 6.773 * t^(-0.2685)
+  fit [t >= 1e6 only, 6 windows]: E(t) = 9.680 * t^(-0.2886)
+```
+
+At `MMAX = 10^10`: `-0.2633` over twelve windows and `-0.2805` over the eight with
+`t >= 1e6`, a divergence of 0.017 against 0.020 here.
+
+`E(t)` still has no single exponent — the window choice moves it by 0.020 — but the
+complementary relation `1 - beta = 0.2759` now lies **between** the two fits, and the
+rms log-residual over all windows is 0.073.
+
+### Superseded: the all-m definition
+
+Before 2026-08-19 the windows took every `m` whose kernel fell in the range, not the
+squarefree `m`. That admits more square multiples `t*s^2` as `MMAX` grows, and since
+`a(t) != 0` does not prevent `a(t s^2) = 0`, it raises `B`. It gave
+
+```
+  1.78e4 1.7614 | 5.62e4 1.7460 | 1.78e5 1.2592 | 5.62e5 1.2119 | 1.78e6 1.1576
+  5.62e6 1.1104 | 1.78e7 1.0763 | 5.62e7 1.0579 | 1.78e8 1.0399 | 5.62e8 1.0290
   fit [all windows  , 10 windows]: E(t) = 16.790 * t^(-0.3201)
   fit [t >= 1e6 only, 6 windows]: E(t) = 10.419 * t^(-0.2924)
 ```
 
-**`E(t)` is not well described by a single power law.** The two smallest windows are
-essentially flat (`0.7614`, `0.7460`) and only the large-`t` windows decay, so any
-single exponent is a statement about which windows were chosen. Quote the cumulative
-count exponent instead — see below. (The previously quoted `t^(-0.28)` is neither of
-these; it came from the large-`t` windows together with the complementary relation
-`1 - 0.7225`.)
+and it is MMAX-dependent: the `1.78e5` window reads `1.2592` at `10^9` and `1.6269` at
+`10^10`, with `n` growing 169,680 -> 533,967. The apparent flatness of the two smallest
+windows (`+0.7614`, `+0.7460`) was an artefact of this, and under it `1 - beta` fell
+outside both fits rather than between them. The two-column comparison in the paper's
+§5.5 keeps both definitions, which is the point there — it is the Corollary 3.3 check.
+
+The `5.62e8` row was also once suppressed by an off-by-one guard: `MMAX` is
+`m[-1] = 999,999,995`, five short of `10^9`, although that is the largest
+`m = 11 (mod 24)` below `10^9`, so the window is fully covered.
 
 ## Cumulative excess count
 

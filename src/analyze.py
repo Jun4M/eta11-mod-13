@@ -65,7 +65,12 @@ for start in range(0, NC, CH):
     nd = (mm % 13) != 0
     zz = z[start:end]; ss = sf[start:end]
     for k, (lo, hi) in enumerate(wins):
-        w = (tt >= lo) & (tt < hi) & nd
+        # SQUAREFREE kernels: for squarefree m the kernel is m itself, so the
+        # window population is fixed once the window is. The earlier definition
+        # took every m whose kernel fell in the window, which admits more square
+        # multiples t*s^2 as MMAX grows and is therefore MMAX-dependent -- the
+        # [1e5,1e5.5) window read B = 1.2592 at MMAX = 1e9 and 1.6269 at 1e10.
+        w = ss & (mm >= lo) & (mm < hi) & nd
         wn[k] += int(w.sum()); wz[k] += int((zz & w).sum())
     for k, X in enumerate(Xs):
         c = ss & (mm <= X) & nd

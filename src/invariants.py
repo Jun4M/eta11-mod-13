@@ -75,8 +75,8 @@ for start in range(0,NC,CH):
     nd=(mm%13)!=0; zz=z[start:end]; ss=sf[start:end]
     if not (np.array_equal(ss,tt==mm) and np.array_equal(tt*s64*s64,mm)): kernel_ok=False
     for k,(lo,hi) in enumerate(wins):
-        wn[k]+=int(((tt>=lo)&(tt<hi)&nd).sum())
-    span_n+=int(((tt>=10**4)&(tt<10**(4.0+0.5*len(wins)))&nd).sum())
+        wn[k]+=int((ss&(mm>=lo)&(mm<hi)&nd).sum())
+    span_n+=int((ss&(mm>=10**4)&(mm<10**(4.0+0.5*len(wins)))&nd).sum())
     for k,X in enumerate(Xs):
         c=ss&(mm<=X)&nd
         Xn[k]+=int(c.sum()); Xz[k]+=int((zz&c).sum())
@@ -173,6 +173,29 @@ for q in [p_ for p_ in primes if p_<200]:
 chk("factorisation: sign of delta_q agrees across two halves of the top decade",
     not flips, f"{tested} primes with |Z| >= 5 in both halves"
                + (f"; sign flips at {flips}" if flips else ""))
+
+# 12. The E(t) windows must be MMAX-independent, which requires that every m
+#     counted in a window LIES in that window -- i.e. the population is the
+#     squarefree m of the range, not every m whose kernel falls in it. The latter
+#     admits square multiples from arbitrarily far above hi and drifts with MMAX.
+#     Checked against what analyze.py actually wrote, so a change of definition
+#     there fails here.
+import json as _json, os as _os
+if _os.path.exists("results/E_of_t.json"):
+    rec=_json.load(open("results/E_of_t.json"))
+    byc={round(r[0]):int(r[2]) for r in rec}
+    worst=None
+    for k,(lo,hi) in enumerate(wins):
+        c=round(math.sqrt(lo*hi))
+        if c in byc and byc[c]!=int(wn[k]):
+            worst=(c,byc[c],int(wn[k])); break
+    chk("E(t) windows are MMAX-independent (every counted m lies in its window)",
+        worst is None,
+        f"{len(byc)} windows in results/E_of_t.json match the squarefree counts"
+        if worst is None else
+        f"window centred {worst[0]:,}: analyze.py wrote n={worst[1]:,}, squarefree count is {worst[2]:,}")
+else:
+    print("(!) results/E_of_t.json absent -- run analyze.py to enable the MMAX-independence check")
 
 # 11. only the zero class is anomalous: the twelve nonzero classes sit within 1%
 dev=max(abs(13*int((aw==v).sum())/tn-1) for v in range(1,13))
