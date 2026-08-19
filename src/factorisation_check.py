@@ -36,7 +36,17 @@ for p in np.nonzero(sv)[0]:
         q *= p*p
 sf = (sq == 1); z = (a == 0)
 
+# Default: every prime with |f_q| > 0.3 on the consistent population. Below that
+# the relative spread sd/|mean| diverges because the mean approaches zero, so a
+# percentage spread is only meaningful where f_q is bounded away from 0.
 QS = [5, 7, 11, 13, 23, 43]
+try:
+    import json as _json
+    _d = _json.load(open("results/delta_q.json"))
+    _big = sorted(int(k) for k in _d if abs(_d[k][2]) > 0.3)
+    if len(_big) >= 6: QS = _big
+except Exception:
+    pass
 WINDOWS = [(1e6, 1e7), (1e7, 1e8), (1e8, 1e9)]
 cols, Es = {q: [] for q in QS}, []
 for lo, hi in WINDOWS:
@@ -63,5 +73,10 @@ for q in QS:
     out[q] = list(v) + [float(v.mean()), float(v.std(ddof=1))]
     print(f"| {q} | {v[0]:+.3f} | {v[1]:+.3f} | {v[2]:+.3f} | "
           f"{v.mean():+.3f} | {v.std(ddof=1):.3f} |")
+sds=[out[q][4] for q in QS]
+rel=[100*out[q][4]/abs(out[q][3]) for q in QS]
+print(f"\nabsolute sd: {min(sds):.3f} to {max(sds):.3f}")
+print(f"relative spread sd/|mean|: {min(rel):.0f}% to {max(rel):.0f}%  "
+      f"(over {len(QS)} primes with |f_q| > 0.3; ddof = 1)")
 json.dump({"E": Es, "f_q": out}, open("results/factorisation.json", "w"))
-print("\nwritten to results/factorisation.json")
+print("written to results/factorisation.json")

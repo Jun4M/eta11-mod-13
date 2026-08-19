@@ -150,12 +150,12 @@ alpha_hat = 0.405   sigma_hat = 0.0438
   95% interval: [0.355, 0.457]
 
   0.5000  1/2  Euler-factor / Sato-Tate   d(-2logL) =   11.64  REJECTED
-  0.3333  1/3                             d(-2logL) =    8.52  REJECTED
+  0.3333  1/3                             d(-2logL) =    8.31  REJECTED
   0.2500  1/4                             d(-2logL) =   45.88  REJECTED
   0.3750  3/8                             d(-2logL) =    1.30  consistent
   0.4000  2/5                             d(-2logL) =    0.02  consistent
-  0.4167  5/12                            d(-2logL) =    0.26  consistent
-  0.6667  2/3                             d(-2logL) =   69.97  REJECTED
+  0.4167  5/12                            d(-2logL) =    0.23  consistent
+  0.6667  2/3                             d(-2logL) =   69.60  REJECTED
   0.7500  3/4                             d(-2logL) =  109.37  REJECTED
 ```
 
@@ -168,6 +168,44 @@ intact: `2/5` is still the only surviving simple rational, `1/2` still rejected.
 `sigma_hat` moved 0.0543 -> 0.0438, which is just the 1.198 amplitude inflation coming
 out (0.0543/1.198 = 0.0453, the residual difference being the 7% change in n).
 
+## delta_q extended to q < 20000 (secondary; same m <= 10^9 data)
+
+`results/delta_q_q20000_from1e9.json`, 2260 primes `5 <= q < 20000`, same consistent
+population (`n = 31,753,325`, `E = +0.0317`). 30 minutes.
+
+```
+n = 2260 primes, q in [5, 19997], measurement SE = 0.00125
+alpha_hat = 0.427   sigma_hat = 0.0508
+  68% interval: [0.410, 0.445]
+  95% interval: [0.390, 0.465]
+  0.2500  1/4    d(-2logL) =  121.65  REJECTED
+  0.3333  1/3    d(-2logL) =   28.12  REJECTED
+  0.3750  3/8    d(-2logL) =    7.90  REJECTED
+  0.4000  2/5    d(-2logL) =    2.00  consistent
+  0.4167  5/12   d(-2logL) =    0.27  consistent
+  0.5000  1/2    d(-2logL) =   12.52  REJECTED
+  0.6667  2/3    d(-2logL) =  102.23  REJECTED
+  0.7500  3/4    d(-2logL) =  164.12  REJECTED
+151 of 2260 primes with |Z| >= 3 (chance 6.1)
+```
+
+**alpha drifts upward with the prime range**, from `0.405` at 723 primes to `0.427` at
+2260, and `3/8` crosses from consistent (1.30) to rejected (7.90) while `5/12` becomes
+the closest candidate. The 723-prime figures remain the paper's primary statement; the
+drift is unexplained and is the reason `m <= 10^10` was computed.
+
+An independent measurement of the same quantity agreed on `151 of 2260` exactly and on
+six of the eight candidates to the digit (121.65, 7.90, 2.00, 12.52 and both intervals),
+differing only at `1/3` (27.85 against 28.12) and `5/12` (0.30 against 0.27). Neither
+difference is explained by the evaluation point or by the assumed SE -- varying the SE
+moves all eight together and breaks the six that match -- and neither changes a verdict.
+
+`fit_alpha.py` was corrected on 2026-08-19 to profile the likelihood at the exact
+candidate rather than at the nearest grid point. `1/3`, `5/12` and `2/3` are the only
+candidates off the 0.0025 grid, and they were being evaluated up to 0.00083 away: at
+723 primes `1/3` moves 8.52 -> 8.31, `5/12` 0.26 -> 0.23, `2/3` 69.97 -> 69.60. The
+on-grid candidates are unaffected.
+
 ## Factorisation check — src/factorisation_check.py
 
 `f_q = delta_q / E` across three decade windows in t, same population in each:
@@ -177,15 +215,24 @@ E falls 0.1199 -> 0.0620 -> 0.0317  (factor 3.8)
 ```
 
 | q | w1 | w2 | w3 | mean | sd |
-|---|---|---|---|---|---|
+|---|---:|---:|---:|---:|---:|
 | 5 | -1.082 | -1.085 | -0.935 | -1.034 | 0.086 |
 | 7 | +0.666 | +0.458 | +0.469 | +0.531 | 0.117 |
 | 11 | +0.897 | +1.167 | +0.955 | +1.006 | 0.142 |
 | 13 | +0.997 | +1.116 | +0.924 | +1.012 | 0.097 |
+| 17 | +0.454 | +0.251 | +0.356 | +0.354 | 0.101 |
 | 23 | -0.558 | -0.673 | -0.497 | -0.576 | 0.090 |
+| 37 | +0.553 | +0.386 | +0.350 | +0.430 | 0.108 |
 | 43 | -0.443 | -0.591 | -0.419 | -0.484 | 0.093 |
+| 73 | +0.674 | +0.431 | +0.436 | +0.514 | 0.139 |
+| 89 | -0.379 | -0.338 | -0.412 | -0.376 | 0.037 |
+| 101 | -0.298 | -0.383 | -0.405 | -0.362 | 0.056 |
 
-Spread is 8–22% of the mean. `sd` is the sample standard deviation (ddof=1); the
+The prime set is every `q` with `|f_q| > 0.3` on the consistent population, 11 primes.
+Absolute sd runs 0.037 to 0.142; relative spread `sd/|mean|` is 8–29% of the mean.
+Below `|f_q| ~ 0.3` the relative spread diverges because the mean approaches zero, so a
+percentage is only meaningful on this restricted set. (`q = 31`, with `|f_q| = 0.263`,
+gives the smallest absolute sd of any small prime, 0.027.) `sd` is the sample standard deviation (ddof=1); the
 superseded table used the population sd (ddof=0), which is why `q = 13`'s row shows
 0.097 here against 0.079 there despite identical entries. `q = 13`'s row is
 unchanged by the population fix, as expected — its own class split always excluded

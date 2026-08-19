@@ -38,9 +38,13 @@ print("\ncandidate exponents (chi^2 with 1 dof; reject above 3.84):")
 for cand, lab in [(0.5, "1/2  Euler-factor / Sato-Tate"), (1/3, "1/3"),
                   (0.25, "1/4"), (3/8, "3/8"), (0.4, "2/5"), (5/12, "5/12"),
                   (2/3, "2/3"), (0.75, "3/4")]:
-    j = int(np.abs(al-cand).argmin())
-    print(f"  {cand:.4f}  {lab:<30}  d(-2logL) = {2*(ll[j]-ll[i]):7.2f}"
-          f"  {'consistent' if 2*(ll[j]-ll[i]) < 3.84 else 'REJECTED'}")
+    # profile at the EXACT candidate. Snapping to the alpha grid put 1/3, 5/12
+    # and 2/3 up to 0.00083 off their true values, which visibly shifted their
+    # d(-2logL); the grid is for locating the optimum, not for evaluating tests.
+    llc, _ = profile(cand)
+    d = 2*(llc-ll[i])
+    print(f"  {cand:.4f}  {lab:<30}  d(-2logL) = {d:7.2f}"
+          f"  {'consistent' if d < 3.84 else 'REJECTED'}")
 print("\nnoise-deconvolved signal sd by q-bin (constant <=> alpha = 1/2):")
 x = dl*np.sqrt(qs)
 edges = [5, 60, 200, 600, 1200, 2400, 5500, 20000, 100000]
