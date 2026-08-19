@@ -781,7 +781,9 @@ When adding a mechanism, ask what it cannot see.
 ## Data and code
 
 Generation, verification and analysis code, with the expected output of every table
-above in `results/EXPECTED.md`: <https://github.com/Jun4M/eta11-mod-13>.
+above in `results/EXPECTED.md`: <https://github.com/Jun4M/eta11-mod-13>, archived at
+[doi:10.5281/zenodo.22016761](https://doi.org/10.5281/zenodo.22016761) — the concept
+DOI, which resolves to the most recent archived version.
 
 The coefficient files are regenerable rather than distributed, being too large to
 version:

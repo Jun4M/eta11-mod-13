@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22016761.svg)](https://doi.org/10.5281/zenodo.22016761)
+
 # p13 — vanishing of `eta^11` coefficients modulo 13
 
 Computational study of how often `13 | p(n)` along the Ramanujan branch, and how
