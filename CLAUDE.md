@@ -36,18 +36,44 @@ touching either file. When a number changes, change it in both, and add it to th
 `FIGURES` list if it is new. The recurring failure here is a number corrected in one
 document and left stale in the other.
 
-**A figure agreeing with EXPECTED.md is not a verified figure.**
-`check_against_expected.py` compares two documents; it cannot catch a number that is
-wrong in both, and the population-mixing bug was exactly that. Before trusting any
-figure, ask which script regenerates it — `paper/claims_audit.tsv` records that for all
-101 numeric claims. A new figure needs a script, an entry in that file, and ideally an
-invariant in `src/invariants.py`. The three audit scripts are:
+**A figure may only enter `results/EXPECTED.md` if a script in `src/` emitted it in the
+same run.** Not "could in principle be computed" — emitted, by a script, in the run
+being recorded. Transcribing a number into EXPECTED.md and into the paper makes
+`check_against_expected.py` assert a fiction: the checker compares two documents and
+cannot catch a figure that is wrong in both. That is exactly how the population-mixing
+bug survived, and the 2026-08-19 audit found seven more figures in the same state,
+introduced while fixing it.
+
+If no script emits a figure, the figure does not go in EXPECTED.md. If that means it has
+to leave the paper until a script exists, **it leaves.** `paper/claims_audit.tsv` records,
+for every numeric claim, which script produces it; a new figure needs a row there.
+
+**The invariants are the checking layer, not the checker.** `src/invariants.py` is part
+of the routine path, not something run on suspicion — it is the only layer that can fail
+on a number that is consistently wrong everywhere. Add an invariant for every *relation*
+the paper asserts, not for every number it quotes: the assertion that `δ_q` and `E` share
+a population would have caught the eleven corrections, where no amount of agreement
+between documents could. Routine path, in order:
 
 ```bash
-python3 src/invariants.py a13.bin          # 8 assertions that must reconcile
-python3 src/independent_check.py a13.bin   # different algorithms, not refactors
-python3 src/paper_figures.py a13.bin       # figures no other script emits
+python3 src/test_verify.py a13.bin         # must print "all checks passed"
+python3 src/analyze.py a13.bin
+python3 src/invariants.py a13.bin          # must print "all invariants hold"
+python3 src/fit_alpha.py results/delta_q.json
+python3 src/factorisation_check.py a13.bin
+python3 src/paper_figures.py a13.bin
+python3 paper/check_against_expected.py    # last, and the weakest of the checks
 ```
+
+Run `src/independent_check.py` when a script changes: it reimplements each quantity by a
+different algorithm (kernels by factorisation, Legendre by Euler's criterion, `α` by
+binned moments), which a refactor of the same algorithm cannot substitute for.
+
+**`analyze.py` and `invariants.py` are memory-lean by necessity.** They keep only the
+uint32 square part and two bool arrays full-length and form `m`, `t` and the Legendre
+class in 2^24 chunks. The earlier int64 version needed 21 GB at `MMAX = 10^10`. Peak is
+about 2.2 GB at `10^9` and 6 GB at `10^10`. There is one implementation of the analysis;
+keep it that way — two is how the population bug lasted as long as it did.
 
 **Do not overclaim.** The history of this project is a sequence of claims that
 looked clean at small sample size and dissolved at larger sample size:

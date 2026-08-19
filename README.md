@@ -129,6 +129,8 @@ python3 src/analyze.py a13.bin
 python3 src/fit_alpha.py results/delta_q.json
 python3 src/factorisation_check.py a13.bin
 python3 src/invariants.py a13.bin           # must print "all invariants hold"
+                                            # 11 relation assertions; part of the
+                                            # routine path, not run on suspicion
 python3 src/independent_check.py a13.bin
 python3 src/paper_figures.py a13.bin
 python3 paper/check_against_expected.py     # paper and EXPECTED.md must agree
