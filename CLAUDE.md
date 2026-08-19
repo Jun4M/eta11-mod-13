@@ -84,6 +84,16 @@ small range could catch that — only a second computation at a different range 
 Invariant 12 now enforces the property that makes the quantity range-free: every `m`
 counted in a window must lie in that window, checked against what `analyze.py` wrote.
 
+**The corrections log is a document that can go stale, and it is checked.** An entry's
+justification can be withdrawn by a later entry without the entry noticing: item 1 stood
+as a live conclusion for a day after item 17 overturned its reasoning. Every entry states
+what it superseded; whenever two entries touch the same section, the earlier must either
+reference the later by number or be recorded in `REVIEWED` in
+`paper/check_against_expected.py` with the reason it still stands. Adding an entry
+therefore forces a re-read of every earlier entry on its section, and the re-read has to
+be written down. Do not clear a pair by adding it to `REVIEWED` without actually
+re-reading the earlier entry.
+
 **Do not overclaim.** The history of this project is a sequence of claims that
 looked clean at small sample size and dissolved at larger sample size:
 `q^(-1/2)` scaling, Sato–Tate distribution, and a supposed special role for
