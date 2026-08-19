@@ -180,11 +180,8 @@ Expected output is in `results/EXPECTED.md`.
 
 ## Licence
 
-Code (`src/`, `paper/*.py`) is under the MIT licence in `LICENSE`, identical to the one
-in `erdos126`. The data files (`data/`, `results/`) and `paper/manuscript.md` are under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — MIT's text grants rights in
-"the Software" and does not fit a manuscript, and CC BY is what Zenodo and the preprint
-servers expect for one.
+Licensed under the MIT License, in `LICENSE`. This covers the code, the data files, and
+the manuscript in `paper/`. The licence text is identical to the one in `erdos126`.
 
 ## Background
 
