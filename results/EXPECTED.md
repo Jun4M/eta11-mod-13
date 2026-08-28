@@ -36,8 +36,8 @@ only.
 [PASS] reduction  p(n) = 11*a((24n-1)/13) mod 13  -- tested n <= 40000, n = 6 mod 13; 0 mismatches
 [PASS] a13.bin agrees with independent numpy recomputation  -- 200000 coefficients
 [PASS] no exact zeros of eta^11 in the tested range  -- checked 200000 coefficients mod 2^31-1
-[PASS] Hecke law  a(t p^2) = (lam_p + eps(p)(t|p)p^4) a(t)  -- 91200 congruences tested, 0 failures
-[PASS] three-term recursion  a(t p^4) = lam_p a(t p^2) - p^9 a(t)  -- 18833 congruences tested, 0 failures
+[PASS] Hecke law  a(t p^2) = (lam_p + eps(p)(t|p)p^4) a(t)  -- 98800 congruences tested, 0 failures
+[PASS] three-term recursion  a(t p^4) = lam_p a(t p^2) - p^9 a(t)  -- 20164 congruences tested, 0 failures
 [PASS] square class of t=155 vanishes entirely  -- 847 coefficients, 0 nonzero
 [PASS] delta_q reproduces data/delta_q_consistent.json  -- 723 primes, 723 bit-exact, max|d delta|=0.00e+00, max|d Z|=0.00e+00
 all checks passed
@@ -47,6 +47,28 @@ The first seven are unchanged from the previous run — they never depended on t
 population. The eighth is new: it checks a regenerated `results/delta_q.json` against
 `data/delta_q_consistent.json`, and is skipped if `analyze.py` has not been run yet
 (`test_verify.py` is normally run first).
+
+## The p = 13 case of Observation 3.1
+
+`lambda_13 = 6`, added to `LAM` in `test_verify.py` on 2026-08-20, which raised the two
+congruence counts from 91200 and 18833 to 98800 and 20164. No special case is needed:
+`13^4` and `13^9` are 0 mod 13, so the Legendre term and the trailing term of the
+recursion drop out of the shipped formulas and they reduce to
+`a(t*13^(2j)) = 6^j * a(t)`.
+
+Measured over the full `m <= 1e9` range, with no restriction on `t`:
+
+| population | a(t) != 0 | ratio a(t*13^2)/a(t) | a(t) = 0 | propagated |
+|---|---|---|---|---|
+| 13 nmid t | 190,240 | 6 for 100% | 18,508 | 18,508 |
+| 13 \| t | 14,217 | 6 for 100% | 1,859 | 1,859 |
+
+Higher powers: `a(t*13^4) = 10*a(t)` on 1,096 cases and `a(t*13^6) = 8*a(t)` on 8, both
+without exception, matching `6^j mod 13`. The ratio does not split by `(t|13)` — both
+classes give 6 for 100% — which is what the vanishing of the Legendre term predicts.
+
+This is a measurement. The `p != 13` relations are read off a source restricted to
+`p != l`, and whether its hypotheses reach `T(l^2)` has not been checked here.
 
 ## Extended verification — src/extended_verify.py
 

@@ -122,7 +122,7 @@ they do not appear in the literature and are needed below.
 
 ### Observation 3.1
 
-*For squarefree `t ≡ 11 (mod 24)` and every prime `p ≠ 13`,*
+*For squarefree `t ≡ 11 (mod 24)` and every prime `p`,*
 
 ```
 a(t p²)      ≡  ( λ_p + ε(p)·(t|p)·p⁴ ) · a(t)                (mod 13)
@@ -131,15 +131,27 @@ a(t p^{2j})  ≡  λ_p · a(t p^{2j-2})  -  p⁹ · a(t p^{2j-4})    (mod 13),  
 
 *where `ε(p) = +1` if `p ≡ 2 (mod 3)` and `-1` if `p ≡ 1 (mod 3)`, and*
 
-| p | 5 | 7 | 11 | 17 | 19 | 23 | 29 | 31 | 37 | 41 | 43 | 47 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| λ_p | 10 | 8 | 5 | 1 | 8 | 8 | 4 | 4 | 5 | 9 | 12 | 6 |
+| p | 5 | 7 | 11 | 13 | 17 | 19 | 23 | 29 | 31 | 37 | 41 | 43 | 47 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| λ_p | 10 | 8 | 5 | 6 | 1 | 8 | 8 | 4 | 4 | 5 | 9 | 12 | 6 |
+
+At `p = 13` both relations degenerate. `13⁴ ≡ 13⁹ ≡ 0 (mod 13)`, so the Legendre term
+disappears from the first and the trailing term from the second, and what remains is
+`a(t·13^{2j}) ≡ 6^j·a(t)`. **This case is measured, not derived.** The relations for
+`p ≠ 13` are read off a source that restricts to `p ≠ ℓ`, and we have not checked
+whether its hypotheses reach `T(ℓ²)`; the `p = 13` line is stated here on the same
+footing as the rest of Observation 3.1, which is verification (Limitation 3).
 
 **Verification.** The first relation was tested on every squarefree `t ≡ 11 (mod 24)`
-with `t < 2·10⁵` and `t p²` in range — 7,600 cases for each of the twelve primes,
-91200 congruences in all, the count being uniform in `p` because `t < 2·10⁵` binds
-before `t p² ≤ 10⁹` does. The second was tested over the same kernels, 18833
-congruences. No exceptions in either. The character rule was
+with `t < 2·10⁵` and `t p²` in range — 7,600 cases for each of the thirteen primes,
+98800 congruences in all, the count being uniform in `p` because `t < 2·10⁵` binds
+before `t p² ≤ 10⁹` does. The second was tested over the same kernels, 20164
+congruences. No exceptions in either. At `p = 13` the relation was checked separately
+over the full range and holds without restriction on `t`: the ratio `a(t·13²)/a(t)` is
+6 for all 190,240 squarefree `t` with `13 ∤ t` and `a(t) ≢ 0`, and for all 14,217 with
+`13 | t`; `a(t) ≡ 0` propagates in 18,508 cases of the first kind and 1,859 of the
+second, without exception. The ratio does not split by `(t|13)`, which is what the
+vanishing of the Legendre term predicts. The character rule was
 checked separately on all 50 primes `5 ≤ p ≤ 250`, `p ≠ 13`, without exception; within
 each class of `p mod 3` the residue `p mod 4` varies freely (`p = 37, 61, 73, 97, 109,
 157, 181, 193` are all `≡ 1 mod 4` and all give `ε = -1`), so the conductor is 3, not 12.
@@ -151,7 +163,10 @@ giving `p^{λ-1} = p⁴` and `p^{2λ-1} = p⁹` exactly as observed; and `ε(p)`
 `λ_p` does not factor through `p mod 13`: the pairs `(5,31)` and `(17,43)` are
 congruent mod 13 with different `λ_p` (10 against 4, and 1 against 12), so the system
 is not Eisenstein. The converse also occurs — `11 ≡ 37 (mod 13)` with `λ₁₁ = λ₃₇ = 5` —
-so `p mod 13` neither determines `λ_p` nor is determined by it. We did not
+so `p mod 13` neither determines `λ_p` nor is determined by it. `λ₁₃ = 6` is outside
+this argument rather than another instance of it: `13 ≡ 0 (mod 13)`, and no other prime
+in the table is congruent to it, so there is no pair to compare and the reasoning does
+not apply either way. We did not
 identify the Shimura lift; it is not an eta quotient on the divisors of 24 (exhaustive
 search over weight-10 quotients with two or three divisors), and not of level 1
 (`Δ`, `Δ·E₄` … `Δ·E₁₄`, all twists `p^j`, `0 ≤ j ≤ 11`, all at chance level).
@@ -687,7 +702,8 @@ every figure against `results/EXPECTED.md`.
 9. **§3, verification counts.** "11401 cases for each `p ≤ 23`, decreasing to 3175 at
    `p = 47`" cannot be right: `t < 2·10⁵` binds before `t p² ≤ 10⁹` does, so the count
    is uniform in `p` at 7,600, totalling 91200 congruences, with 18833 for the
-   three-term relation.
+   three-term relation. **Item 18 supersedes both totals**: adding `p = 13` to the
+   tested primes raises them to 98800 and 20164. The uniformity argument is unaffected.
 10. **§5.1, number of independent checks.** Seven, now eight — a check that a
     regenerated `results/delta_q.json` reproduces `data/delta_q_consistent.json` was
     added to `test_verify.py`.
@@ -744,6 +760,20 @@ is contiguous; adding an entry forces a re-read of every earlier entry on its se
     to 0.073, and `1 - β = 0.2759` lies between the two fitted exponents instead of
     outside both. An earlier draft read that last discrepancy as evidence against a power
     law; it was evidence against the definition.
+
+18. **§3, the scope of Observation 3.1.** The statement excluded `p = 13`, and the λ_p
+    table had twelve primes. The exclusion was unnecessary: `13⁴ ≡ 13⁹ ≡ 0 (mod 13)`, so
+    the Legendre term and the trailing term of the recursion vanish and the relations
+    reduce to `a(t·13^{2j}) ≡ 6^j·a(t)` with `λ₁₃ = 6`. Measured over the full range with
+    no restriction on `t`: the ratio is 6 for all 190,240 squarefree `t` with `13 ∤ t` and
+    `a(t) ≢ 0` and all 14,217 with `13 | t`, and vanishing propagates in 18,508 and 1,859
+    cases respectively, without exception. `test_verify.py` now carries `p = 13` in the
+    same loop, no special case being needed, which is what moves the counts of item 9.
+    The `p = 13` line is stated as verified rather than derived — the source the other
+    relations are read from restricts to `p ≠ ℓ`, and whether its hypotheses reach
+    `T(ℓ²)` has not been checked here (Limitation 3). This also closes a gap: §3.2 claims
+    propagation for every `s` coprime to 6, which includes `s` divisible by 13, and no
+    script tested that case before.
 
 Also corrected without changing a figure: §2's list of primes for which the single-eta
 reduction fails omitted `ℓ = 19` and `ℓ = 43`; all nine now appear, each verified to

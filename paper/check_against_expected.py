@@ -78,9 +78,12 @@ FIGURES = [
     ("d(-2logL) 1/2",            "11.64"),
     ("d(-2logL) 2/3",            "69.60"),
     ("d(-2logL) 3/4",            "109.37"),
-    ("Hecke congruences",        "91200"),
-    ("three-term congruences",   "18833"),
+    ("Hecke congruences",        "98800"),
+    ("three-term congruences",   "20164"),
     ("t=155 class size",         "847"),
+    ("p=13 propagation, 13!|t",  "18,508"),
+    ("p=13 propagation, 13|t",   "1,859"),
+    ("p=13 nonzero, 13!|t",      "190,240"),
     ("numpy cross-check",        "7,692,308"),
     ("no exact zeros bound",     "92,000,003"),
     ("N(1e7) population",        "352,805"),
@@ -162,6 +165,9 @@ REVIEWED = {
     (9, 12):  "item 12 fits lambda_p and eps independently over the same kernel bound and "
               "confirms the twelve tabulated lambda_p; it does not touch the congruence "
               "counts of item 9.",
+    (12, 18): "item 18 adds lambda_13 = 6, which is outside item 12's argument rather "
+              "than a further instance of it: 13 = 0 mod 13, so no other prime in the "
+              "table is congruent to it and there is no pair to compare. Item 12 stands.",
 }
 
 def check_corrections(paper):

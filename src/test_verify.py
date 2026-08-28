@@ -101,7 +101,11 @@ check("no exact zeros of eta^11 in the tested range",
       int((big == 0).sum()) == 0, f"checked {NS} coefficients mod 2^31-1")
 
 # ------------------- 4. Hecke multiplicative law (Folsom-Kent-Ono, l=13)
-LAM = {5:10, 7:8, 11:5, 17:1, 19:8, 23:8, 29:4, 31:4, 37:5, 41:9, 43:12, 47:6}
+# lambda_13 = 6 included: at p = 13 both relations degenerate, since 13^4 and
+# 13^9 are 0 mod 13, so the Legendre term and the second term of the recursion
+# drop out and the formulas below reduce to a(t*13^(2j)) = 6^j * a(t). The same
+# code therefore tests it without a special case.
+LAM = {5:10, 7:8, 11:5, 13:6, 17:1, 19:8, 23:8, 29:4, 31:4, 37:5, 41:9, 43:12, 47:6}
 def sqfree(x):
     y, d = x, 2
     while d*d <= y:
