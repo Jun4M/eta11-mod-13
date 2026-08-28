@@ -312,7 +312,9 @@ All three passed on every figure the scripts produce — and so did the `E(t)` w
 definition of §6.1, which was still not the quantity the section claimed, and took a
 second computation at ten times the range to expose. The seventeen corrections below are
 of six kinds, three of which were invisible to every mechanism in place when they were
-introduced. Appendix A lists them.
+introduced. Appendix A lists them, and Appendix B states what these checks do not
+establish — the three above were written by the same author as the pipeline, so they
+differ in algorithm and not in origin.
 
 ### 5.5 The statistics depend only on the kernel
 
@@ -775,6 +777,48 @@ Worked examples are the corrections log.
 
 Modes 3, 5 and 6 were invisible to every mechanism in place when they were introduced.
 When adding a mechanism, ask what it cannot see.
+
+---
+
+## Appendix B. Extent of AI involvement, and the limits of the verification
+
+The computations, the analysis code, the invariants and much of this text were produced
+with an AI assistant (Claude, Anthropic) working interactively with the author across
+sessions. The author set the questions, supplied several components and independent
+measurements, checked the literature against the original papers, and made the
+editorial decisions. Errors that remain are the author's.
+
+**The independence claimed in §5.4 is of algorithms, not of authors.** The pipeline,
+`src/independent_check.py`, the invariants and the small-range brute force were written
+in the same project by the same model family at different times. Agreement among them
+rules out implementation slips — an off-by-one in a sieve, a wrong modular inverse, a
+float mean where an integer ratio belongs — because those do not survive being rewritten
+a different way. It does not rule out a shared misconception about *which quantity to
+compute*, because every implementation inherits it. Agreement between implementations of
+common origin is therefore weaker evidence than agreement between implementations
+designed independently, and should be read as the former.
+
+This is not a hypothetical reservation. The `E(t)` window definition of §6.1 was emitted
+correctly by the pipeline, passed all twelve invariants, reproduced under
+reimplementation by different algorithms, and matched a brute-force computation in exact
+integers — and was still not the quantity the section claimed, because all four shared
+one assumption about which `m` belonged in a window. It fell only to a computation at
+ten times the range. That is correction 17, and failure mode 5 of Appendix A; modes 3
+and 5 are precisely the classes that same-origin implementations cannot reach.
+
+Three checks in this paper do not have that limitation, having involved a second party:
+
+- the author's independent measurement of `δ_q` over 723 primes, which reproduces
+  `data/delta_q_consistent.json` bit-for-bit and is asserted by `test_verify.py`;
+- the author's independent fit at `q < 20000`, which replicates the `|Z| ≥ 3` count
+  exactly and six of the eight candidate statistics to the digit (§6.4);
+- the literature of §7, read by the author against the original papers after two of
+  three summaries taken at second hand proved wrong.
+
+A reader should weight §5.4 as evidence against implementation error, which it is, and
+should not read it as evidence that the quantities are the intended ones. For that, the
+guarantees are the second-party checks above and the agreement of `β` across a decade of
+range — not the number of mechanisms that agree.
 
 ---
 
