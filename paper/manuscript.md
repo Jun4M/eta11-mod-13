@@ -1,4 +1,4 @@
-# Equidistribution of the partition function modulo 13 along square classes: a computation to 10⁹
+# Vanishing of eta^11 modulo 13 along square classes: a computation to 10^10
 
 *Draft v3, corrected 2026-08-18. Supersedes all earlier versions, which are in the git
 history. Numbers are on a single consistent population (squarefree kernels coprime to
