@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-Instructions for Claude Code working in this repository.
+These are the working rules I impose on any assistant used in this repository.
+Responsibility for the contents rests with me.
 
 ## What this is
 
