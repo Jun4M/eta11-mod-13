@@ -24,14 +24,20 @@ measurement that someone may cite. A wrong number is worse than no number.
   after multiplying by `sqrt(q)` it grows — this artefact has already produced two
   wrong conclusions in this project. `src/fit_alpha.py` handles it correctly; copy
   that approach.
-- Report confidence intervals, not point estimates. `alpha = 0.405` alone is
+- Report confidence intervals, not point estimates — and where the estimate is not
+  settled, say that instead of quoting either. `alpha` is the live example: it reads
+  0.405, 0.427 and 0.430 on three populations and its interval does not narrow with
+  `m`, so §6.4 names no value and no rational. The older phrasing of this rule, kept
+  below for its shape, understated that. `alpha = 0.405` alone is
   misleading; `[0.355, 0.457]` is the result. And where there is no well-defined
   interval — `E(t)`, whose exponent depends on which windows are fitted — say so
   rather than quoting a single exponent.
 
 **The paper and `results/EXPECTED.md` must never differ.** Every figure in
 `paper/manuscript.md` also appears in `EXPECTED.md`, and `python3
-paper/check_against_expected.py` asserts it — 53 figures, string-exact. Run it after
+paper/check_against_expected.py` asserts it, string-exact, for every figure in its
+`FIGURES` list. Do not quote the count here: it drifted from 53 to 119 while this line
+said 53, which is the failure this very rule exists to prevent. Run the checker after
 touching either file. When a number changes, change it in both, and add it to the
 `FIGURES` list if it is new. The recurring failure here is a number corrected in one
 document and left stale in the other.
@@ -126,17 +132,24 @@ When comparing against `f_q`, note that `results/fq_for_pari.txt` must be regene
 from `results/delta_q.json`; the version shipped before 2026-08-19 predated the
 population fix and was not a rescaling of the corrected values.
 
-### 2. Extend to `m ≤ 10^10`
+### 2. ~~Extend to `m ≤ 10^10`~~ — DONE 2026-08-19
 
-```bash
-./eta11 10000000000 2     # repeat until COMPLETE; checkpoints in state.bin
-```
+`./eta11 10000000000 2`, repeated until COMPLETE; 0.83 GB resident, about fifty minutes.
+`analyze.py` needs 2.6 GB at this range and 7.1 GB peak through the delta_q loop, which
+took 7035 s. Guard: `state*.bin` is tied to a specific `MMAX` — delete it when changing
+`MMAX`, and note it is gitignored by glob because a rename once put 397 MB into history.
 
-0.83 GB resident. Then rerun `analyze.py` and `fit_alpha.py`. This should narrow
-the `alpha` interval enough to test `2/5` against neighbours, and add one more
-decade to `E(t)`.
+**The stated expectation was wrong, and that is the useful part.** This task said the
+extra decade "should narrow the `alpha` interval enough to test `2/5` against
+neighbours". It did not: the 95% width went 0.102 -> 0.100 while the measurement error
+fell by a factor 3.2. `alpha`'s precision is set by the number of auxiliary primes, not
+by `m` — measured directly, widths 0.202, 0.148, 0.100, 0.075 at 180, 361, 723, 2260
+primes, against 0.100 -> 0.082 for a tenfold cut in the SE. So no further extension of
+`m` will settle `alpha`, and §6.4 is written around that.
 
-Guard: `state.bin` is tied to a specific `MMAX`. Delete it when changing `MMAX`.
+What the decade did buy: `beta` confirmed at 0.7242 against 0.7241, moving by 0.0001,
+with `3/4` rejected more strongly; two more `E(t)` windows; and the discovery that the
+old `E(t)` window definition was MMAX-dependent, which only a second range could show.
 
 ### 3. Mechanism hunting
 
